@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 通过静态工厂的方式进行bean的创建 -->
+	<!--  
+		使用静态工厂配置的是bean  而不是静态工厂
+		class:指定为对应的静态工厂的全类名
+		factory-method:指定bean是通过工厂的哪个方法进行实例化的
+		constructor-arg:如果对应的工厂方法需要一个参数   那么就需要这个标签指定传入的参数
+	-->
+	<bean id="car1" class="cn.zhang.beans.factory.StaticCarFactory" factory-method="getCar">
+		<constructor-arg value="Ford"></constructor-arg>
+	</bean>
+	
+	<!-- 通过实例工厂的方式进行bean的创建 -->
+	<!-- 先构建bean对应的哪个beanFactory  因为要想通过实例化工厂的方法获取bean 那么首先需要有一个beanFactory实例 -->
+	<bean id="carFactory" class="cn.zhang.beans.factory.InstaceCarFactory"></bean>
+
+	<!-- 配置bean的生成规则 -->
+	<!--  
+		factory-bean:指定是通过哪个工厂bean进行对应bean的创建
+		factory-method:指定bean是通过工厂的哪个方法进行实例化的
+		constructor-arg:如果对应的工厂方法需要一个参数   那么就需要这个标签指定传入的参数
+	-->
+	<bean id="car2" factory-bean="carFactory" factory-method="getCar">
+		<constructor-arg value="Bmw"></constructor-arg>
+	</bean>
+	
+	<!-- 通过使用实现FactoryBean接口的方式进行对应bean的生成 -->
+	<bean id="car3" class="cn.zhang.beans.factory.CarFactoryBean">
+		<property name="brand" value="Audi"></property>
+		<property name="price" value="450000"></property>
+	</bean>
+</beans>

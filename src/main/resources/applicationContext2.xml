@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<bean id="car" class="cn.zhang.beans.collection.Car">
+		<constructor-arg value="Audi" index="1"></constructor-arg>
+		<constructor-arg value="Beijing" index="0"></constructor-arg>
+		<constructor-arg value="300000" index="2" type="double"></constructor-arg>
+	</bean>
+	
+	<bean id="car2" class="cn.zhang.beans.collection.Car">
+		<constructor-arg value="Baoma" type="java.lang.String"></constructor-arg>
+		<constructor-arg type="java.lang.String">
+			<value><![CDATA[<Shanghai>]]></value>
+		</constructor-arg>
+		<constructor-arg value="240" type="int"></constructor-arg>
+	</bean>
+	
+	<!-- 测试简单的集合属性的赋予 -->
+	<bean id="person3" class="cn.zhang.beans.collection.Person">
+		<property name="name" value="Jack"></property>
+		<property name="age" value="27"></property>
+		<property name="car">
+			<!-- 
+				使用<list></list>标签为List集合属性赋值 
+				引申:数组和Set集合与List几乎一样  唯一不同的是需求
+				当需要使用不同的元素的时候  set将是一个不错的选择
+				如果对注入的属性没有要求  那么list是一个不错的选择
+				因为list的底层使用的就是数组
+				因此数组和list一模一样
+				即也可以使用list为数组模型进行值的赋予
+			-->
+			<list>
+				<ref bean="car"/>
+				<ref bean="car2"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置map属性值 -->
+	<bean id="newPerson" class="cn.zhang.beans.collection.NewPerson">
+		<property name="name" value="Rose"></property>
+		<property name="age" value="17"></property>
+		<property name="car">
+			<!--  
+				使用map节点及entry的子节点配置Map类型的成员变量
+			-->
+			<map>
+				<entry key="A" value-ref="car"></entry>
+				<entry key="B" value-ref="car2"></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- 配置Properties属性值 -->
+	<bean id="dataSource" class="cn.zhang.beans.collection.DataSource">
+		<property name="properties">
+			<!-- 使用props和prop子节点为Properties树型赋值 -->
+			<props>
+				<prop key="username">root</prop>
+				<prop key="password">root</prop>
+				<prop key="jdbcUrl">jdbc:mysql:///mybatis</prop>
+				<prop key="driverClass">com.mysql.jdbc.Driver</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!--  
+		如果希望配置的List、Map、Set或者Properties能够公用   就需要将这样的集合抽取成为一个独立的bean
+		此处需要导入util的命名空间
+	-->
+	<util:list id="cars">
+		<ref bean="car"/>
+		<ref bean="car2"/>
+	</util:list>
+	
+	<!-- 通过 p 命名空间为bean的属性赋值  需要先导入 p 命名空间;相对于传统的配置方式  更加的便捷 -->
+	<bean id="person" class="cn.zhang.beans.collection.Person" p:name="Jerry" p:age="25" p:car-ref="cars"></bean>
+
+</beans>

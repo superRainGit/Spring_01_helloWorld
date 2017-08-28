@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!--  
+		使用bean标签将bean注册到IOC容器中
+		id:是bean的唯一标识
+		class:bean的全类名  如果使用setter注入属性
+			那么就需要bean具有无参数构造器
+	-->
+	<bean id="helloWorld" class="cn.zhang.beans.HelloWorld">
+		<property name="name" value="Spring"></property>
+	</bean>
+	
+	<!--  
+		如果使用构造器进行bean属性的初始化
+		那么bean就不需要具有无参数的构造器了[但是必须要使用构造器初始化的方式进行初始化]
+		默认的构造器的初始化顺序与下面的constructor-arg标签的顺序一致
+		也可以使用index属性指定初始化哪个属性:index属性是从0开始计数的
+	-->
+	<bean id="car" class="cn.zhang.beans.Car">
+		<constructor-arg value="Audi" index="1"></constructor-arg>
+		<constructor-arg value="Beijing" index="0"></constructor-arg>
+		<constructor-arg value="300000" index="2"></constructor-arg>
+	</bean>
+	
+	<!--  
+		当需要重载的构造函数的时候
+		如果值的初始化有一定的兼容性的时候
+		可以通过指定constructor-arg的type属性指定具体的类型
+	-->
+	<bean id="car2" class="cn.zhang.beans.Car">
+		<constructor-arg value="Baoma" type="java.lang.String"></constructor-arg>
+		<!-- 如果字母值包含特殊字符  可以使用<![CDATA[]]>进行包裹 -->
+		<!-- 属性值也可以使用value子节点进行值的注入 -->
+		<constructor-arg type="java.lang.String">
+			<value><![CDATA[<Shanghai>]]></value>
+		</constructor-arg>
+		<constructor-arg value="240" type="int"></constructor-arg>
+	</bean>
+	
+	<bean id="person" class="cn.zhang.beans.Person">
+		<property name="name" value="Zhangsan"></property>
+		<property name="age" value="24"></property>
+		<!--  
+			对于字面量的值 可以直接使用value进行值的赋予
+			但是对于引用类型的值就需要使用ref进行值的赋予
+			或者使用<ref bean="car"/>标签进行引用属性的赋值
+		-->
+		<!-- <property name="car" ref="car"></property> -->
+		<!--  
+			<property name="car">
+				<ref bean="car"/>
+			</property>
+		-->
+		<!-- 
+			可以使用内部bean的方式进行引用类型的赋值 
+			内部bean不能被外部引用的  因此id属性没有用
+		-->
+		<property name="car">
+			<bean class="cn.zhang.beans.Car">
+				<constructor-arg value="Ford"></constructor-arg>
+				<constructor-arg value="ChangAn"></constructor-arg>
+				<constructor-arg value="280" type="int"></constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="person2" class="cn.zhang.beans.Person">
+		<property name="name" value="Tom"></property>
+		<property name="age" value="25"></property>
+		<!-- 
+			为引用类型赋值可以使用级联赋值的方式 
+			注:如果想要使用级联方式为引用类型赋值
+				需要先将引用类型进行初始化才可以赋值
+				否则会报一个异常  提示信息是指定的的属性值为null
+		-->
+		<property name="car">
+			<bean class="cn.zhang.beans.Car"></bean>
+		</property>
+		<property name="car.name" value="Benci"></property>
+		<property name="car.factory" value="ShangHai"></property>
+		<property name="car.price" value="250000"></property>
+		<property name="car.maxSpeed" value="290"></property>
+	</bean>
+	
+	<!-- 测试简单的集合属性的赋予 -->
+	<bean id="person3" class="cn.zhang.beans.collection.Person">
+		<property name="name" value="Jack"></property>
+		<property name="age" value="27"></property>
+		<property name="car">
+			<list>
+				<ref bean="car"/>
+				<ref bean="car2"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

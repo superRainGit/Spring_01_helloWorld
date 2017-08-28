@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="address" class="cn.zhang.beans.spel.Address">
+		<!--  
+			使用SPEL指定字面量:
+				- 如果是基本的数据类型或者布尔类型的值  可以直接使用#{23} #{23.7} #{true}来指定
+				- 如果是字符串的字面量  需要使用""或者''将字符串包裹起来  当一个字面量
+		-->
+		<property name="city" value="#{'BeiJing'}"></property>
+		<property name="street" value="ShunYi"></property>
+	</bean>
+	
+	<bean id="car" class="cn.zhang.beans.spel.Car">
+		<property name="name" value="Audi"></property>
+		<property name="price" value="350000"></property>
+		<!--  
+			使用SPEL引用类的静态属性
+				- 使用T(java.lang.Math)来引用类  然后使用.PI来引用对应的静态属性
+		-->
+		<property name="tyrePremeter" value="#{T(java.lang.Math).PI * 80}"></property>
+	</bean>
+	
+	<bean id="car2" class="cn.zhang.beans.spel.Car">
+		<property name="name" value="Audi"></property>
+		<property name="price" value="150000"></property>
+		<!--  
+			使用SPEL引用类的静态属性
+				- 使用T(java.lang.Math)来引用类  然后使用.PI来引用对应的静态属性
+		-->
+		<property name="tyrePremeter" value="#{T(java.lang.Math).PI * 80}"></property>
+	</bean>
+	
+	<!-- 
+		注:使用SPEL进行引用类型的使用以及通过SPEL进行值的计算的时候引用的
+			数据，都是使用的是在IOC容器中配置的bean的id来进行引用的
+	-->
+	<bean id="person" class="cn.zhang.beans.spel.Person">
+		<!-- 使用SPEL来进行引用类型的赋值  而不是使用原来的ref来进行引用 -->
+		<property name="car" value="#{car}"></property>
+		<!-- 使用SPEL来引用其他bean的属性 -->
+		<property name="city" value="#{address.city}"></property>
+		<!-- 使用SPEL进行表达式的计算 -->
+		<property name="info" value="#{car2.price > 300000 ? '金领' : car2.price > 200000 ? '白领' : '普通'}"></property>
+		<property name="name" value="Tom"></property>
+	</bean>
+
+</beans>

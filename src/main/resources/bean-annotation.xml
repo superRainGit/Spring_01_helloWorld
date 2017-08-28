@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!--  
+		基于注解的包扫描的配置:
+			使用@Repository @Service @Component @Controller注解配置的bean会被Spring扫描到并且加入到IOC容器中
+			在包扫描的情况下会自动的被Spring装配  如果没有指定注册到IOC容器中的bean的名称
+			那么它的默认名称就是简单类名的首字母小写
+			例如:UserServiceImp -> userServieImp
+			同时也可以在对应的注解上使用value属性明确的指定bean的名称
+		base-package:指定扫描哪个包以及其子包下的类
+		resource-pattern:指定扫描的资源[例如:service/*.class:指定只扫描base-package.service下的所有类]
+		use-default-filters:指定是否使用默认的过滤器，默认是true  
+			此属性默认是加载所有的@Component @Service @Controller @Repository
+			因此如果想要只加载某些指定的注解
+			就需要将此属性指定为false
+	-->
+	<context:component-scan base-package="cn.zhang.beans.annotation">
+		<!-- 
+			context:exclude-filter:该子节点指定排除哪些指定表达式的组件
+				- type
+					annotation:基于哪些注解进行排除
+					assignable:基于哪些类(包含其子类)进行排除
+				- expression
+					指定注解获取类的全类名
+					[注:不能使用@Component注解  因为@Controller @Repository @Service上使用了@Component注解]
+					或者指定哪些类(全类名)及子类不会被加载
+			<context:exclude-filter type="annotation" 
+				expression="org.springframework.stereotype.Controller"/>
+		-->
+		<!--  
+			context:include-filter:该子节点指定只加载哪些指定表达式的组件
+				- type
+					annotation:基于哪些注解进行包含
+					assignable:基于哪些类(包含其子类)进行包含
+				- expression
+					指定注解获取类的全类名
+					[注:不能使用@Component注解  因为使用了@Component注解  会将所有的@Controller @Repository @Service加载进来]
+					或者指定哪些类(全类名)及子类会被加载
+			<context:include-filter type="annotation" 
+				expression="org.springframework.stereotype.Component"/>
+		-->
+	</context:component-scan>
+
+</beans>

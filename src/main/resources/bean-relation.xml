@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 通过指定bean的abstract属性为true指定该bean为抽象bean  不能被IOC容器进行实例化  只能被继承配置 -->
+	<bean id="address" p:city="BeiJing" p:street="ShunYi" abstract="true"></bean>
+	
+	<!--  
+		bean配置的继承:
+			使用bean的parent属性指定继承哪个bean的配置
+	-->
+	<bean id="address2" class="cn.zhang.beans.autowired.Address" p:street="ChangPing" parent="address"></bean>
+	
+	<!-- 
+		可以通过bean的depends-on属性指定当前bean依赖于哪一个bean存在
+			依赖的意思是:如果当前bean实例化的时候  如果依赖的那个bean不存在的话  就会报错
+			这只是物理上的依赖   并不是属性上的依赖 [自己感觉没啥卵用。。。]
+	-->
+	<bean id="person" class="cn.zhang.beans.autowired.Person" p:name="Tom" p:address-ref="address2"></bean>
+
+</beans>

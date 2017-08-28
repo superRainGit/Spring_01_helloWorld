@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.8.3.201612191259-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
+	<configs>
+		<config>src/main/resources/applicationContext.xml</config>
+		<config>src/main/resources/bean-autowired.xml</config>
+		<config>src/main/resources/bean-relation.xml</config>
+		<config>src/main/resources/bean-scope.xml</config>
+		<config>src/main/resources/bean-spel.xml</config>
+		<config>src/main/resources/bean-factory.xml</config>
+		<config>src/main/resources/bean-annotation.xml</config>
+	</configs>
+	<autoconfigs>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
